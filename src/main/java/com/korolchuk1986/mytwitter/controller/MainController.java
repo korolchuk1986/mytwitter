@@ -1,4 +1,4 @@
-package com.korolchuk1986.mytwitter;
+package com.korolchuk1986.mytwitter.controller;
 
 import com.korolchuk1986.mytwitter.domain.Message;
 import com.korolchuk1986.mytwitter.repo.MessageRepo;
@@ -11,17 +11,21 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.Map;
 
 @Controller
-public class AppController {
+public class MainController {
     @Autowired
     private MessageRepo messageRepo;
+    @GetMapping("/")
+    public String home() {
+        return  "home";
+    }
 
-    @GetMapping()
+    @GetMapping("/main")
     public String main(Map<String, Object> model) {
         Iterable<Message> messages = messageRepo.findAll();
         model.put("messages", messages);
         return  "main";
     }
-    @PostMapping()
+    @PostMapping("/main")
     public String add(@RequestParam String text, @RequestParam String tag, Map<String, Object> model) {
         Message message = new Message(text, tag);
         messageRepo.save(message);
