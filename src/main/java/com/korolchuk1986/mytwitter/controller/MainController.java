@@ -1,8 +1,10 @@
 package com.korolchuk1986.mytwitter.controller;
 
 import com.korolchuk1986.mytwitter.domain.Message;
+import com.korolchuk1986.mytwitter.domain.User;
 import com.korolchuk1986.mytwitter.repo.MessageRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,8 +28,11 @@ public class MainController {
         return  "main";
     }
     @PostMapping("/main")
-    public String add(@RequestParam String text, @RequestParam String tag, Map<String, Object> model) {
-        Message message = new Message(text, tag);
+    public String add(@AuthenticationPrincipal User author,
+                      @RequestParam String text,
+                      @RequestParam String tag,
+                      Map<String, Object> model) {
+        Message message = new Message(text, tag, author);
         messageRepo.save(message);
 
         Iterable<Message> messages = messageRepo.findAll();
