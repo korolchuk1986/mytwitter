@@ -1,0 +1,32 @@
+<#import "parts/common.ftlh" as c>
+<#import "parts/login.ftlh" as l>
+<@c.page>
+    <div>
+        <@l.logout ></@l.logout>
+    </div>
+    <div>
+        <form method="post">
+            <input type="text" name="text" placeholder="Input message">
+            <input type="text" name="tag" placeholder="Input tag">
+            <input type="hidden" name="_csrf" value="${_csrf.token}">
+            <button type="submit">Add</button>
+        </form>
+    </div>
+    <div>
+        <form method="get" action="/main">
+            <input type="text" name="filter" placeholder="Input tag" value="${filter}">
+            <button type="submit">Find</button>
+        </form>
+    </div>
+    <div>List messages</div>
+    <#list messages as message>
+    <div>
+        <b>${message.id}</b>
+        <span>${message.text}</span>
+        <i>${message.tag}</i>
+        <strong>${message.authorName}</strong>
+    </div>
+        <#else>
+        No message
+    </#list>
+</@c.page>
