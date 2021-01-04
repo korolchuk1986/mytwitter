@@ -28,13 +28,6 @@ public class MainController {
 
     @GetMapping("/")
     public String home(@AuthenticationPrincipal  User user, Model model) {
-        String userName;
-        if (user == null) {
-            userName = "USER";
-        } else {
-            userName = user.getUsername();
-        }
-        model.addAttribute("user", userName);
         return  "home";
     }
 
