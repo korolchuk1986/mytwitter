@@ -3,7 +3,7 @@
     <div class="mb-3 row">
         <label for="staticUsername" class="col-sm-1 col-form-label">Username</label>
         <div class="col-sm-4">
-            <input type="text" class="form-control" id="staticUsername" value="Username" name="username">
+            <input type="text" class="form-control" id="staticUsername" placeholder="Username" name="username">
         </div>
     </div>
     <div class="mb-3 row">
@@ -12,6 +12,14 @@
             <input type="password" class="form-control" id="inputPassword" name="password">
         </div>
     </div>
+    <#if isRegisterForm>
+        <div class="mb-3 row">
+            <label for="inputEmail" class="col-sm-1 col-form-label">Email</label>
+            <div class="col-sm-4">
+                <input type="email" class="form-control" id="inputEmail" name="email" placeholder="some@some.com">
+            </div>
+        </div>
+    </#if>
 
     <input type="hidden" name="_csrf" value="${_csrf.token}">
     <#if !isRegisterForm><div class="pb-3"><a href="/registration">Add new user</a></div></#if>
