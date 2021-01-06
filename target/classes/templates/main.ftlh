@@ -37,7 +37,7 @@
         </form>
     </div>
 
-    <h5 class="mt-5">List messages<h5>
+    <h3 class="mt-5">List messages<h5>
         <div class="row row-cols-1 row-cols-md-4 g-4">
             <#list messages as message>
                 <div class="col">
@@ -55,7 +55,7 @@
                     </div>
                 </div>
             <#else>
-                No message
+                <h5>No message</h5>
             </#list>
         </div>
     <div>

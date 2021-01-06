@@ -1,5 +1,9 @@
+<#include "security.ftlh">
 <#macro login path isRegisterForm>
 <form action="${path}" method="post" class="mt-3">
+    <#if SPRING_SECURITY_LAST_EXCEPTION??>
+        ${Session.SPRING_SECURITY_LAST_EXCEPTION.message}
+    </#if>
     <div class="mb-3 row">
         <label for="staticUsername" class="col-sm-1 col-form-label">Username</label>
         <div class="col-sm-4">
@@ -26,6 +30,7 @@
     <button type="submit" class="btn btn-primary"><#if isRegisterForm>Create<#else>Sign In</#if></button>
 </form>
 </#macro>
+
 <#macro logout>
 <form action="/logout" method="post">
     <input type="hidden" name="_csrf" value="${_csrf.token}">

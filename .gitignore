@@ -1,1 +1,6 @@
-src/main/resources/application.properties
+application.properties
+*.class
+*.jar
+target
+.idea
+uploads
