@@ -19,11 +19,18 @@
                         <a class="nav-link"  href="/user">User List</a>
                     </li>
                 </#if>
+                <#if user??>
+                    <li class="nav-item">
+                        <a class="nav-link"  href="/user/profile">Profile</a>
+                    </li>
+                </#if>
             </ul>
             <span class="navbar-text me-3">
                 ${name}
             </span>
+            <#if user??>
             <@l.logout ></@l.logout>
+            </#if>
         </div>
     </div>
 </nav>
