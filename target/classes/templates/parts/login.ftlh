@@ -4,7 +4,7 @@
     <div class="mb-3 row">
         <label for="staticUsername" class="col-sm-1 col-form-label">Username</label>
         <div class="col-sm-4">
-            <input type="text" class="form-control <#if usernameError??>is-invalid</#if>" id="staticUsername" placeholder="Username" name="username" value="<#if user??>user.name</#if>">
+            <input type="text" class="form-control <#if usernameError??>is-invalid</#if>" id="staticUsername" placeholder="Username" name="username" value="<#if user??>${user.name}</#if>">
             <#if usernameError??>
                 <div class="invalid-feedback d-block">
                     ${usernameError}
