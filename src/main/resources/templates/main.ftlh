@@ -11,18 +11,28 @@
     <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
         Add new message
     </button>
-    <div class="collapse mt-3" id="collapseExample">
-        <form method="post" enctype="multipart/form-data">
+    <div class="collapse mt-3 <#if message??>show</#if>" id="collapseExample">
+        <form method="post" enctype="multipart/form-data" novalidate>
             <div class="row mb-3">
                 <label for="input-message" class="form-label col-sm-2" >Input message</label>
                 <div class="col-sm-4" >
-                    <input type="text" class="form-control col-sm-4"  id="input-message" placeholder="Input message" name="text">
+                    <input type="text" class="form-control <#if textError??>is-invalid</#if>"  id="input-message" placeholder="Input message" name="text" value="<#if message??>${message.text}</#if>">
+                    <#if textError??>
+                        <div class="invalid-feedback d-block">
+                            ${textError}
+                        </div>
+                    </#if>
                 </div>
             </div>
             <div class="row mb-3">
                 <label for="input-tag" class="form-label col-sm-2" >Input tag</label>
                 <div class="col-sm-4" >
-                    <input type="text" class="form-control"  id="input-tag" placeholder="Input tag" name="tag">
+                    <input type="text" class="form-control <#if tagError??>is-invalid</#if>"  id="input-tag" placeholder="Input tag" name="tag">
+                    <#if tagError??>
+                        <div class="invalid-feedback d-block">
+                            ${tagError}
+                        </div>
+                    </#if>
                 </div>
             </div>
 
