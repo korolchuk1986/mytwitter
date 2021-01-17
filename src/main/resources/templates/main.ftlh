@@ -1,4 +1,5 @@
 <#import "parts/common.ftlh" as c>
+<#import "parts/messageEdit.ftlh" as e>
 <@c.page>
     <div class="row col-sm-4">
         <form method="get" action="/main" >
@@ -8,65 +9,9 @@
             </div>
         </form>
     </div>
-    <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-        Add new message
-    </button>
-    <div class="collapse mt-3 <#if message??>show</#if>" id="collapseExample">
-        <form method="post" enctype="multipart/form-data" novalidate>
-            <div class="row mb-3">
-                <label for="input-message" class="form-label col-sm-2" >Input message</label>
-                <div class="col-sm-4" >
-                    <input type="text" class="form-control <#if textError??>is-invalid</#if>"  id="input-message" placeholder="Input message" name="text" value="<#if message??>${message.text}</#if>">
-                    <#if textError??>
-                        <div class="invalid-feedback d-block">
-                            ${textError}
-                        </div>
-                    </#if>
-                </div>
-            </div>
-            <div class="row mb-3">
-                <label for="input-tag" class="form-label col-sm-2" >Input tag</label>
-                <div class="col-sm-4" >
-                    <input type="text" class="form-control <#if tagError??>is-invalid</#if>"  id="input-tag" placeholder="Input tag" name="tag">
-                    <#if tagError??>
-                        <div class="invalid-feedback d-block">
-                            ${tagError}
-                        </div>
-                    </#if>
-                </div>
-            </div>
 
-            <div class="row mb-3">
-                <div class="col-sm-6" >
-                    <input type="file" class="form-control" id="input-file" name="file">
-                </div>
-            </div>
 
-            <input type="hidden" name="_csrf" value="${_csrf.token}">
-            <button class="btn btn-primary px-5" type="submit">Add</button>
-        </form>
-    </div>
+    <@e.messageEdit "Add message"></@e.messageEdit>
+    <#include "parts/messageList.ftlh">
 
-    <h3 class="mt-3">List messages<h5>
-        <div class="row row-cols-1 row-cols-md-4 g-4">
-            <#list messages as message>
-                <div class="col">
-                    <div class="card m-1">
-                        <#if message.filename??>
-                            <img src="/img/${message.filename}" class="card-img-top">
-                        </#if>
-                        <div class="card-body">
-                            <h5 class="card-title">${message.tag}</h5>
-                            <p class="card-text">${message.text}</p>
-                        </div>
-                        <div class="card-footer">
-                            <small class="text-muted">${message.authorName}</small>
-                        </div>
-                    </div>
-                </div>
-            <#else>
-                <h5>No message</h5>
-            </#list>
-        </div>
-    <div>
 </@c.page>
