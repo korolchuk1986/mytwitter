@@ -33,9 +33,7 @@
             <span class="navbar-text me-3">
                 ${name}
             </span>
-            <#if user??>
             <@l.logout ></@l.logout>
-            </#if>
         </div>
     </div>
 </nav>
