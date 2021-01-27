@@ -3,8 +3,13 @@ package com.korolchuk1986.mytwitter.controller;
 import com.korolchuk1986.mytwitter.domain.Message;
 import com.korolchuk1986.mytwitter.domain.User;
 import com.korolchuk1986.mytwitter.repo.MessageRepo;
+import com.korolchuk1986.mytwitter.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,7 +24,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
-import java.util.Set;
 import java.util.UUID;
 
 
@@ -27,6 +31,9 @@ import java.util.UUID;
 public class MainController {
     @Autowired
     private MessageRepo messageRepo;
+
+    @Autowired
+    private MessageService messageService;
 
     @Value("${upload.path}")
     private String uploadPath;
@@ -37,16 +44,14 @@ public class MainController {
     }
 
     @GetMapping("/main")
-    public String main(@RequestParam(required = false, defaultValue = "") String filter, Model model) {
-        Iterable<Message> messages = messageRepo.findAll();
+    public String main(@RequestParam(required = false, defaultValue = "") String filter,
+                       Model model,
+                       @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC, size = 8) Pageable pageable) {
 
-        if(filter != null && !filter.isEmpty()) {
-            messages = messageRepo.findByTag(filter);
-        } else {
-            messages = messageRepo.findAll();
-        }
+        Page<Message> page = messageService.messagesList(pageable,filter);
 
-        model.addAttribute("messages", messages);
+        model.addAttribute("page", page);
+        model.addAttribute("url", "/main");
         model.addAttribute("filter", filter);
         return  "main";
     }
@@ -55,7 +60,8 @@ public class MainController {
                       @Valid Message message,
                       BindingResult bindingResult,
                       Model model,
-                      @RequestParam("file") MultipartFile file) throws IOException {
+                      @RequestParam("file") MultipartFile file
+                     ) throws IOException {
 
         message.setAuthor(user);
 
@@ -92,19 +98,23 @@ public class MainController {
         }
     }
 
-    @GetMapping("user-messagers/{user}")
+    @GetMapping("user-messagers/{author}")
     public String userMessages(@AuthenticationPrincipal User currentUser,
-                               @PathVariable User user,
+                               @PathVariable User author,
                                @RequestParam(required = false) Message message,
-                               Model model) {
-        Set<Message> messages = user.getMessages();
-        model.addAttribute("userChannel", user);
-        model.addAttribute("subscriptionsCount", user.getSubscriptions().size());
-        model.addAttribute("subscribersCount", user.getSubscribers().size());
-        model.addAttribute("messages", messages);
+                               Model model,
+                               @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC, size = 8) Pageable pageable) {
+        
+        Page<Message> page = messageService.messagesListForUser(pageable, author);
+        
+        model.addAttribute("userChannel", author);
+        model.addAttribute("subscriptionsCount", author.getSubscriptions().size());
+        model.addAttribute("subscribersCount", author.getSubscribers().size());
+        model.addAttribute("page", page);
         model.addAttribute("message", message);
-        model.addAttribute("isSubcriber", user.getSubscribers().contains(currentUser));
-        model.addAttribute("isCurrentUser", currentUser.equals(user));
+        model.addAttribute("isSubcriber", author.getSubscribers().contains(currentUser));
+        model.addAttribute("isCurrentUser", currentUser.equals(author));
+        model.addAttribute("url", "/user-messagers/" + author.getId());
         return "userMessages";
     }
 

@@ -1,10 +1,16 @@
 package com.korolchuk1986.mytwitter.repo;
 
 import com.korolchuk1986.mytwitter.domain.Message;
+import com.korolchuk1986.mytwitter.domain.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
-
-import java.util.List;
+import org.springframework.data.repository.query.Param;
 
 public interface MessageRepo extends CrudRepository<Message, Long> {
-    List<Message> findByTag(String tag);
+    Page<Message> findByTag(String tag, Pageable pageable);
+    Page<Message> findAll(Pageable pageable);
+    @Query("from Message m where m.author = :author")
+    Page<Message> findByUser(Pageable pageable, @Param("author") User author);
 }
