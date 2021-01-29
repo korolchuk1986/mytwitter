@@ -16,7 +16,7 @@
                 </li>
                 <#if user??>
                     <li class="nav-item">
-                        <a class="nav-link"  href="/user-messagers/${currentUserId}">My messages</a>
+                        <a class="nav-link"  href="/user-messages/${currentUserId}">My messages</a>
                     </li>
                 </#if>
                 <#if isAdmin>
